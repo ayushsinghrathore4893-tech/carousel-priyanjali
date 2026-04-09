@@ -9,7 +9,6 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      /* Prevents blue highlight on tap for a cleaner feel */
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -19,11 +18,10 @@
       overflow: hidden;
       background: #000;
       font-family: 'Segoe UI', sans-serif;
-      /* Prevents browser-level pull-to-refresh and zooming gestures */
       touch-action: none; 
     }
 
-    /* --- AUDIO OVERLAY STYLES --- */
+    /* --- AUDIO OVERLAY --- */
     #audio-overlay {
       position: fixed;
       top: 0;
@@ -43,45 +41,40 @@
 
     .modal-content {
       background: rgba(255, 255, 255, 0.1);
-      padding: 40px;
+      padding: 30px;
       border-radius: 20px;
       backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 85%;
-      max-width: 400px;
+      width: 80%;
+      max-width: 350px;
     }
 
     .modal-content h2 {
       margin-bottom: 25px;
       font-weight: 300;
-      letter-spacing: 1px;
+      font-size: 1.2rem;
     }
 
     .choice-btns {
       display: flex;
-      gap: 20px;
+      gap: 15px;
       justify-content: center;
     }
 
     .choice-btn {
-      padding: 12px 35px;
+      padding: 10px 25px;
       border-radius: 50px;
       border: 1px solid white;
       background: transparent;
       color: white;
       cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      /* Disables double-tap zoom specifically on buttons */
+      font-size: 0.9rem;
       touch-action: manipulation;
     }
 
-    .choice-btn:hover {
-      background: white;
-      color: black;
-    }
+    .choice-btn:hover { background: white; color: black; }
 
-    /* --- THE SLIDER MAGIC (STRICTLY PRESERVED) --- */
+    /* --- SLIDER --- */
     main {
       position: relative;
       width: 100%;
@@ -120,7 +113,7 @@
 
     .content {
       position: absolute;
-      top: 50%;
+      top: 45%;
       left: 10%;
       width: min(80%, 500px);
       color: #fff;
@@ -132,7 +125,7 @@
     .item:nth-child(2) .content { display: block; }
 
     .content .title {
-      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-size: clamp(1.8rem, 7vw, 3.5rem);
       text-transform: uppercase;
       font-weight: 900;
       opacity: 0;
@@ -141,7 +134,7 @@
 
     .content .description {
       margin-top: 10px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       opacity: 0;
       animation: showText 0.8s ease-in-out 0.4s forwards;
     }
@@ -151,19 +144,21 @@
       to { opacity: 1; transform: translateY(0); filter: blur(0); }
     }
 
+    /* --- NAVIGATION --- */
     .nav {
       position: absolute;
-      bottom: 40px;
+      bottom: calc(20px + env(safe-area-inset-bottom));
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
       display: flex;
       gap: 15px;
+      padding-bottom: 10px; 
     }
 
     .btn {
-      width: 55px;
-      height: 55px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       border: 1px solid rgba(255, 255, 255, 0.3);
       background: rgba(255, 255, 255, 0.1);
@@ -173,28 +168,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       touch-action: manipulation;
-    }
-
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: #fff;
     }
 
     @media (max-width: 768px) {
       .item {
-        width: 100px;
-        height: 150px;
+        width: 80px;
+        height: 120px;
+        bottom: 100px;
         top: auto;
-        bottom: 110px;
-        transform: none;
       }
-      .item:nth-child(3) { left: 15px; }
-      .item:nth-child(4) { left: 125px; }
-      .item:nth-child(5) { left: 235px; }
-      .nav { bottom: 30px; }
-      .content { left: 5%; }
+      .item:nth-child(3) { left: 20px; }
+      .item:nth-child(4) { left: 110px; }
+      .item:nth-child(5) { left: 200px; }
+      .nav { bottom: calc(10px + env(safe-area-inset-bottom)); }
+      .btn { width: 45px; height: 45px; font-size: 1.1rem; }
+      .content { top: 35%; left: 8%; }
     }
   </style>
 </head>
@@ -206,7 +196,7 @@
 
 <div id="audio-overlay">
   <div class="modal-content">
-    <h2>Would you like to play music?</h2>
+    <h2>Play background music?</h2>
     <div class="choice-btns">
       <button class="choice-btn" id="yesBtn">Yes</button>
       <button class="choice-btn" id="noBtn">No</button>
@@ -231,7 +221,7 @@
     <li class='item' style="background-image: url('https://iili.io/B0TBtYx.jpg')">
       <div class='content'>
         <h2 class='title'>Soulful</h2>
-        <p class='description'>"here’s something about you that’s just… effortlessly beautiful.. 😍"</p>
+        <p class='description'>"You're like a fine wine – you get better with time. 😍"</p>
       </div>
     </li>
     <li class='item' style="background-image: url('https://iili.io/qma0hAu.jpg')">
@@ -243,7 +233,7 @@
     <li class='item' style="background-image: url('https://iili.io/B0TBiBe.jpg')">
       <div class='content'>
         <h2 class='title'>Cute</h2>
-        <p class='description'>"You don’t even try, but you stand out in the nicest way.💫"</p>
+        <p class='description'>"If you were a cat, you'd purr-fectly steal my heart.💫"</p>
       </div>
     </li>
     <li class='item' style="background-image: url('https://iili.io/B0TBDkQ.jpg')">
@@ -255,8 +245,8 @@
   </ul>
   
   <nav class='nav'>
-    <button class='btn prev'><ion-icon name="chevron-back-outline"></ion-icon></button>
-    <button class='btn next'><ion-icon name="chevron-forward-outline"></ion-icon></button>
+    <button class='btn prev' aria-label="Previous"><ion-icon name="chevron-back-outline"></ion-icon></button>
+    <button class='btn next' aria-label="Next"><ion-icon name="chevron-forward-outline"></ion-icon></button>
   </nav>
 </main>
 
@@ -270,38 +260,55 @@
   const yesBtn = document.getElementById('yesBtn');
   const noBtn = document.getElementById('noBtn');
 
-  // Handle Audio Question
+  let autoScroll;
+
+  function nextSlide() {
+    const items = document.querySelectorAll('.item');
+    slider.append(items[0]);
+  }
+
+  function prevSlide() {
+    const items = document.querySelectorAll('.item');
+    slider.prepend(items[items.length - 1]);
+  }
+
+  function resetTimer() {
+    clearInterval(autoScroll);
+    autoScroll = setInterval(nextSlide, 5000);
+  }
+
   yesBtn.addEventListener('click', (e) => {
-    e.preventDefault(); // Extra layer of zoom prevention
+    e.preventDefault();
     audio.play();
     removeOverlay();
+    autoScroll = setInterval(nextSlide, 5000);
   });
 
   noBtn.addEventListener('click', (e) => {
     e.preventDefault();
     removeOverlay();
+    autoScroll = setInterval(nextSlide, 5000);
   });
 
   function removeOverlay() {
     overlay.style.opacity = '0';
     setTimeout(() => {
       overlay.style.display = 'none';
-      // Restores touch action for the slider after overlay is gone
       document.body.style.touchAction = 'pan-y'; 
     }, 500);
   }
 
-  // Original Slider Logic
   document.addEventListener('click', function(e) {
-    const items = document.querySelectorAll('.item');
     const nextBtn = e.target.closest('.next');
     const prevBtn = e.target.closest('.prev');
 
     if (nextBtn) {
-      slider.append(items[0]);
+      nextSlide();
+      resetTimer(); // Restart the 5s clock if manually clicked
     }
     if (prevBtn) {
-      slider.prepend(items[items.length - 1]);
+      prevSlide();
+      resetTimer();
     }
   }, false);
 </script>
