@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carousel For Priyanjali</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* --- AUDIO OVERLAY STYLES --- */
+    #audio-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      color: #fff;
+      text-align: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-content h2 {
+      margin-bottom: 25px;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .choice-btns {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .choice-btn {
+      padding: 12px 35px;
+      border-radius: 50px;
+      border: 1px solid white;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .choice-btn:hover {
+      background: white;
+      color: black;
+    }
+
+    /* --- YOUR ORIGINAL STYLES REMAINING UNCHANGED --- */
+    main {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slider { list-style-type: none; }
+
+    .item {
+      width: 200px;
+      height: 300px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      background-position: center;
+      background-size: cover;
+      border-radius: 20px;
+      transition: 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+    }
+
+    .item:nth-child(1), .item:nth-child(2) {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      transform: none;
+      border-radius: 0;
+    }
+
+    .item:nth-child(3) { left: 50%; }
+    .item:nth-child(4) { left: calc(50% + 220px); }
+    .item:nth-child(5) { left: calc(50% + 440px); }
+    .item:nth-child(n+6) { left: calc(50% + 660px); opacity: 0; }
+
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      width: min(80%, 500px);
+      color: #fff;
+      transform: translateY(-50%);
+      display: none;
+      z-index: 10;
+    }
+
+    .item:nth-child(2) .content { display: block; }
+
+    .content .title {
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      text-transform: uppercase;
+      font-weight: 900;
+      opacity: 0;
+      animation: showText 0.8s ease-in-out 0.2s forwards;
+    }
+
+    .content .description {
+      margin-top: 10px;
+      font-size: 1rem;
+      opacity: 0;
+      animation: showText 0.8s ease-in-out 0.4s forwards;
+    }
+
+    @keyframes showText {
+      from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    .nav {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .item {
+        width: 100px;
+        height: 150px;
+        top: auto;
+        bottom: 110px;
+        transform: none;
+      }
+      .item:nth-child(3) { left: 15px; }
+      .item:nth-child(4) { left: 125px; }
+      .item:nth-child(5) { left: 235px; }
+      .nav { bottom: 30px; }
+      .content { left: 5%; }
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bgAudio" loop>
+  <source src="audio.mp3" type="audio/mpeg">
+</audio>
+
+<div id="audio-overlay">
+  <div class="modal-content">
+    <h2>Would you like to play music?</h2>
+    <div class="choice-btns">
+      <button class="choice-btn" id="yesBtn">Yes</button>
+      <button class="choice-btn" id="noBtn">No</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <ul class='slider'>
+    <li class='item' style="background-image: url('https://iili.io/B0TBZ2j.jpg')">
+      <div class='content'>
+        <h2 class='title'>Your Amazing...</h2>
+        <p class='description'>You came to my mind today… and suddenly everything felt a bit sweeter.🫶</p>
+      </div>
+    </li>
+    <li class='item' style="background-image: url('https://iili.io/qb2zo22.jpg')">
+      <div class='content'>
+        <h2 class='title'>Magical</h2>
+        <p class='description'>"Whenever I look at you, everyone else disappears. ✨"</p>
+      </div>
+    </li>
+    <li class='item' style="background-image: url('https://iili.io/B0TBtYx.jpg')">
+      <div class='content'>
+        <h2 class='title'>Soulful</h2>
+        <p class='description'>"You're like a fine wine – you get better with time. 😍"</p>
+      </div>
+    </li>
+    <li class='item' style="background-image: url('https://iili.io/qma0hAu.jpg')">
+      <div class='content'>
+        <h2 class='title'>Lost</h2>
+        <p class='description'>"I just keep getting lost in your eyes every time I see you. 🌟"</p>
+      </div>
+    </li>
+    <li class='item' style="background-image: url('https://iili.io/B0TBiBe.jpg')">
+      <div class='content'>
+        <h2 class='title'>Cute</h2>
+        <p class='description'>"If you were a cat, you'd purr-fectly steal my heart.💫"</p>
+      </div>
+    </li>
+    <li class='item' style="background-image: url('https://iili.io/B0TBDkQ.jpg')">
+      <div class='content'>
+        <h2 class='title'>Blushing Beauty</h2>
+        <p class='description'>"That gentle blush of yours turns every moment into something quietly magical.🪄"</p>
+      </div>
+    </li>
+  </ul>
+  
+  <nav class='nav'>
+    <button class='btn prev'><ion-icon name="chevron-back-outline"></ion-icon></button>
+    <button class='btn next'><ion-icon name="chevron-forward-outline"></ion-icon></button>
+  </nav>
+</main>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<script>
+  const slider = document.querySelector('.slider');
+  const overlay = document.getElementById('audio-overlay');
+  const audio = document.getElementById('bgAudio');
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+
+  // Handle Audio Question
+  yesBtn.addEventListener('click', () => {
+    audio.play();
+    removeOverlay();
+  });
+
+  noBtn.addEventListener('click', () => {
+    removeOverlay();
+  });
+
+  function removeOverlay() {
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, 500);
+  }
+
+  // Original Slider Logic
+  document.addEventListener('click', function(e) {
+    const items = document.querySelectorAll('.item');
+    const nextBtn = e.target.closest('.next');
+    const prevBtn = e.target.closest('.prev');
+
+    if (nextBtn) {
+      slider.append(items[0]);
+    }
+    if (prevBtn) {
+      slider.prepend(items[items.length - 1]);
+    }
+  }, false);
+</script>
+
+</body>
+</html>
