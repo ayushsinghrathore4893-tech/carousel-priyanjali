@@ -18,6 +18,7 @@
       overflow: hidden;
       background: #000;
       font-family: 'Segoe UI', sans-serif;
+      /* Disables browser gestures like 'swipe to go back' so they don't interfere */
       touch-action: none; 
     }
 
@@ -28,7 +29,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.95);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -36,23 +37,24 @@
       z-index: 2000;
       color: #fff;
       text-align: center;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.6s ease;
     }
 
     .modal-content {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 20px;
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 80%;
-      max-width: 350px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px 30px;
+      border-radius: 30px;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 85%;
+      max-width: 380px;
     }
 
     .modal-content h2 {
-      margin-bottom: 25px;
+      margin-bottom: 30px;
       font-weight: 300;
-      font-size: 1.2rem;
+      letter-spacing: 1px;
+      line-height: 1.4;
     }
 
     .choice-btns {
@@ -62,23 +64,27 @@
     }
 
     .choice-btn {
-      padding: 10px 25px;
+      padding: 12px 35px;
       border-radius: 50px;
       border: 1px solid white;
       background: transparent;
       color: white;
       cursor: pointer;
-      font-size: 0.9rem;
-      touch-action: manipulation;
+      font-size: 1rem;
+      transition: all 0.3s ease;
     }
 
-    .choice-btn:hover { background: white; color: black; }
+    .choice-btn:hover {
+      background: white;
+      color: black;
+    }
 
-    /* --- SLIDER --- */
+    /* --- SLIDER MAIN --- */
     main {
       position: relative;
       width: 100%;
       height: 100%;
+      cursor: pointer;
     }
 
     .slider { list-style-type: none; }
@@ -115,28 +121,32 @@
       position: absolute;
       top: 45%;
       left: 10%;
-      width: min(80%, 500px);
+      width: min(85%, 500px);
       color: #fff;
       transform: translateY(-50%);
       display: none;
       z-index: 10;
+      pointer-events: none; /* Important: clicks pass through to the main listener */
     }
 
     .item:nth-child(2) .content { display: block; }
 
     .content .title {
-      font-size: clamp(1.8rem, 7vw, 3.5rem);
+      font-size: clamp(2rem, 8vw, 3.5rem);
       text-transform: uppercase;
       font-weight: 900;
       opacity: 0;
       animation: showText 0.8s ease-in-out 0.2s forwards;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
 
     .content .description {
-      margin-top: 10px;
-      font-size: 0.95rem;
+      margin-top: 15px;
+      font-size: 1.1rem;
       opacity: 0;
       animation: showText 0.8s ease-in-out 0.4s forwards;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      line-height: 1.5;
     }
 
     @keyframes showText {
@@ -144,46 +154,17 @@
       to { opacity: 1; transform: translateY(0); filter: blur(0); }
     }
 
-    /* --- NAVIGATION --- */
-    .nav {
-      position: absolute;
-      bottom: calc(20px + env(safe-area-inset-bottom));
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-      display: flex;
-      gap: 15px;
-      padding-bottom: 10px; 
-    }
-
-    .btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      touch-action: manipulation;
-    }
-
+    /* --- MOBILE PREVIEW ADJUSTMENTS --- */
     @media (max-width: 768px) {
       .item {
-        width: 80px;
-        height: 120px;
-        bottom: 100px;
+        width: 75px;
+        height: 110px;
+        bottom: 50px;
         top: auto;
       }
-      .item:nth-child(3) { left: 20px; }
-      .item:nth-child(4) { left: 110px; }
-      .item:nth-child(5) { left: 200px; }
-      .nav { bottom: calc(10px + env(safe-area-inset-bottom)); }
-      .btn { width: 45px; height: 45px; font-size: 1.1rem; }
+      .item:nth-child(3) { left: 15px; }
+      .item:nth-child(4) { left: 100px; }
+      .item:nth-child(5) { left: 185px; }
       .content { top: 35%; left: 8%; }
     }
   </style>
@@ -196,15 +177,15 @@
 
 <div id="audio-overlay">
   <div class="modal-content">
-    <h2>Play background music?</h2>
+    <h2>Ready for your <br> birthday surprise?</h2>
     <div class="choice-btns">
-      <button class="choice-btn" id="yesBtn">Yes</button>
+      <button class="choice-btn" id="yesBtn">Yes!</button>
       <button class="choice-btn" id="noBtn">No</button>
     </div>
   </div>
 </div>
 
-<main>
+<main id="main-gallery">
   <ul class='slider'>
     <li class='item' style="background-image: url('https://iili.io/B0TBZ2j.jpg')">
       <div class='content'>
@@ -243,23 +224,14 @@
       </div>
     </li>
   </ul>
-  
-  <nav class='nav'>
-    <button class='btn prev' aria-label="Previous"><ion-icon name="chevron-back-outline"></ion-icon></button>
-    <button class='btn next' aria-label="Next"><ion-icon name="chevron-forward-outline"></ion-icon></button>
-  </nav>
 </main>
-
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
 <script>
   const slider = document.querySelector('.slider');
   const overlay = document.getElementById('audio-overlay');
+  const mainGallery = document.getElementById('main-gallery');
   const audio = document.getElementById('bgAudio');
-  const yesBtn = document.getElementById('yesBtn');
-  const noBtn = document.getElementById('noBtn');
-
+  
   let autoScroll;
 
   function nextSlide() {
@@ -277,40 +249,41 @@
     autoScroll = setInterval(nextSlide, 5000);
   }
 
-  yesBtn.addEventListener('click', (e) => {
-    e.preventDefault();
+  // Handle Overlay Choices
+  document.getElementById('yesBtn').addEventListener('click', () => {
     audio.play();
-    removeOverlay();
-    autoScroll = setInterval(nextSlide, 5000);
+    closeOverlay();
   });
 
-  noBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    removeOverlay();
-    autoScroll = setInterval(nextSlide, 5000);
-  });
+  document.getElementById('noBtn').addEventListener('click', closeOverlay);
 
-  function removeOverlay() {
+  function closeOverlay() {
     overlay.style.opacity = '0';
     setTimeout(() => {
       overlay.style.display = 'none';
-      document.body.style.touchAction = 'pan-y'; 
-    }, 500);
+      // Start the auto-carousel once she enters
+      autoScroll = setInterval(nextSlide, 5000);
+    }, 600);
   }
 
-  document.addEventListener('click', function(e) {
-    const nextBtn = e.target.closest('.next');
-    const prevBtn = e.target.closest('.prev');
+  // --- TAPPING TECHNIQUE ---
+  mainGallery.addEventListener('click', (e) => {
+    // Determine where the user clicked/tapped
+    const screenWidth = window.innerWidth;
+    const clickX = e.clientX;
 
-    if (nextBtn) {
-      nextSlide();
-      resetTimer(); // Restart the 5s clock if manually clicked
-    }
-    if (prevBtn) {
+    // If tap is in the left 30% of the screen, go back
+    if (clickX < screenWidth * 0.3) {
       prevSlide();
-      resetTimer();
+    } 
+    // Otherwise (right 70%), go forward
+    else {
+      nextSlide();
     }
-  }, false);
+    
+    // Reset the 5s timer on every manual tap
+    resetTimer();
+  });
 </script>
 
 </body>
